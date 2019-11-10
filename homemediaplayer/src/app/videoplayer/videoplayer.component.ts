@@ -14,6 +14,6 @@ export class VideoplayerComponent implements OnInit {
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => { this.videoname$ = "http://192.168.1.18:3000/video?video=" + params.video; });
+    this.route.queryParams.subscribe(params => { this.videoname$ = "http://192.168.1.19:3000/video?video=" + params.video; });
   }
 }
