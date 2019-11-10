@@ -1,0 +1,17 @@
+{
+  "name": "media-server",
+  "version": "1.0.0",
+  "description": "Streaming video example",
+  "main": "server.ts",
+  "engines": {
+    "node": ">=6.2.0"
+  },
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "nodemon": "^1.11.0"
+  }
+}
