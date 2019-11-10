@@ -1,0 +1,6 @@
+<ul>
+	<li *ngFor="let fileName of videonames$" >
+	  <a [routerLink]="['/videoplayer']" [queryParams]="{video: fileName.video }" routerLinkActive="active">{{fileName.video}}&nbsp;&nbsp;</a>
+	</li>
+</ul>
+<router-outlet></router-outlet>
