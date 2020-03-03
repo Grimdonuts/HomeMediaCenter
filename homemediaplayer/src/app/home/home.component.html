@@ -7,8 +7,8 @@
 			<div *ngFor="let videochildren of fileName.children">
 					<a [routerLink]="['/videoplayer']" [queryParams]="{video: videochildren.video }"
 						routerLinkActive="active">{{videochildren.video}}</a>
+						<br/>
 				</div>
-				<br/>
 			</div>
 		</div>
 		<div *ngIf="fileName.video && fileName.folder === null">
