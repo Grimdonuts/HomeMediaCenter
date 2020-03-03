@@ -4,10 +4,10 @@
 			<button class="accordion"
 					(click)="accordionclick($event)">-{{fileName.folder}}-</button>
 				<div class="panel">
-			<ng-container *ngFor="let videochildren of fileName.children">
+			<ng-container *ngFor="let videochildren of fileName.children" style="text-indent: 20px;">
+				<br />
 					<a [routerLink]="['/videoplayer']" [queryParams]="{video: videochildren.video }"
-						routerLinkActive="active" style="text-indent: 20px;">{{videochildren.video}}</a>
-						<br />
+						routerLinkActive="active">{{videochildren.video}}</a>
 						<br />
 			</ng-container>
 			</div>
