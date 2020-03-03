@@ -6,7 +6,7 @@
 				<div class="panel">
 			<ng-container *ngFor="let videochildren of fileName.children">
 					<a [routerLink]="['/videoplayer']" [queryParams]="{video: videochildren.video }"
-						routerLinkActive="active">{{videochildren.video}}</a>
+						routerLinkActive="active" style="text-indent: 20px;">{{videochildren.video}}</a>
 						<br />
 						<br />
 			</ng-container>
