@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
-import { Videos } from '../home/home.component';
 
 @Component({
   selector: 'app-videoplayer',
@@ -9,7 +8,7 @@ import { Videos } from '../home/home.component';
   styleUrls: ['./videoplayer.component.scss']
 })
 export class VideoplayerComponent implements OnInit {
-  @Input() video: Videos;
+  @Input() video: any;
   videoname$: string = "";
   constructor(private route: ActivatedRoute) { }
 

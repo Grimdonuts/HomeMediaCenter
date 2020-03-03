@@ -7,16 +7,25 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  videonames$: Videos[] = [];
+  videonames$ = [];
 
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    this.http.get('http://192.168.1.19:3000/filenames').subscribe((res: string[])=> { res.forEach((data) => { this.videonames$.push({ video: data }); }); });
-    console.log(this.videonames$);
+    this.http.get('http://192.168.1.19:3000/filenames').subscribe((res: string[]) => {
+      res.forEach((data) => {
+          this.videonames$.push(data);
+      });
+    });
   }
-}
 
-export class Videos {
-  video: string;
+  accordionclick($event) {
+    $event.target.classList.toggle("active");
+    var panel = $event.target.nextElementSibling;
+    if (panel.style.display === "block") {
+      panel.style.display = "none";
+    } else {
+      panel.style.display = "block";
+    }
+  }
 }

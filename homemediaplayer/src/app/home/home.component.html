@@ -1,13 +1,26 @@
 <ul>
-	<li *ngFor="let fileName of videonames$" >
-	  <a [routerLink]="['/videoplayer']" [queryParams]="{video: fileName.video }" routerLinkActive="active">{{fileName.video}}&nbsp;&nbsp;</a>
+	<li *ngFor="let fileName of videonames$">
+		<div *ngIf="fileName.folder">
+			<button class="accordion"
+					(click)="accordionclick($event)">-{{fileName.folder}}-</button>
+				<div class="panel" style="text-indent: 20px;">
+			<div *ngFor="let videochildren of fileName.children">
+					<a [routerLink]="['/videoplayer']" [queryParams]="{video: videochildren.video }"
+						routerLinkActive="active">{{videochildren.video}}&nbsp;&nbsp;</a>
+				</div>
+			</div>
+		</div>
+		<div *ngIf="fileName.video && fileName.folder === null">
+			<a [routerLink]="['/videoplayer']" [queryParams]="{ video: fileName.video }"
+				routerLinkActive="active">{{fileName.video}}&nbsp;&nbsp;</a>
+		</div>
 	</li>
 </ul>
 <br><br>
 <form method="POST" action="http://192.168.1.19:3000/fileupload" enctype="multipart/form-data">
 	<input type="file" name="document" />
 	<input type="submit" />
-  </form>
+</form>
 <br>
 <br>
 <router-outlet></router-outlet>
