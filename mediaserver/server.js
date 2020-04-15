@@ -1,9 +1,9 @@
-const express = require('express');
-const fs = require('fs');
-const path = require('path');
-const app = express();
-const cors = require('cors');
-const busboy = require('connect-busboy');
+var express = require('express');
+var fs = require('fs');
+var path = require('path');
+var app = express();
+var cors = require('cors');
+var busboy = require('connect-busboy');
 
 var originsWhitelist = [
   'http://localhost:4200',
@@ -32,17 +32,17 @@ app.get('/', function (req, res) {
 });
 
 app.get('/filenames', function (req, res) {
-  const testFolder = './assets/';
-  const fileNames = [];
+  var testFolder = './assets/';
+  var fileNames = [];
 
   fs.readdirSync(testFolder).forEach(file => {
-    if (path.extname(file) === '.mp4') {
+    if (path.extname(file) === '.mp4' || path.extname(file) === '.mkv') {
       fileNames.push({ video: file, folder: null });
     } else if (path.extname(file) === '') {
       console.log(path.extname(file));
       var videosinfolder = [];
       fs.readdirSync(testFolder + file).forEach(foldercontents => {
-        videosinfolder.push({video: foldercontents});
+        videosinfolder.push({ video: foldercontents });
       });
       fileNames.push({ folder: file, children: videosinfolder });
     }
@@ -51,8 +51,8 @@ app.get('/filenames', function (req, res) {
 });
 
 app.get('/video', function (req, res) {
-  const videoname = req.param("video");
-  const list = fs.readdirSync('./assets/');
+  var videoname = req.param("video");
+  var list = fs.readdirSync('./assets/');
   var path = "";
   if (list.includes(videoname)) {
     path = './assets/' + videoname;
@@ -71,15 +71,19 @@ app.get('/video', function (req, res) {
     res.status(500).send('Bad Request');
     return;
   }
-  const stat = fs.statSync(path);
-  const fileSize = stat.size;
-
-  const range = req.headers.range
-
+  var stat = fs.statSync(path);
+  var fileSize = stat.size;
+  var videotype = '';
+  var range = req.headers.range
+  if (videoname.includes('.mp4')) {
+    videotype = 'mp4';
+  } else if (videoname.includes('.mkv')) {
+    videotype = 'mkv';
+  }
   if (range) {
-    const parts = range.replace(/bytes=/, "").split("-")
-    const start = parseInt(parts[0], 10)
-    const end = parts[1]
+    var parts = range.replace(/bytes=/, "").split("-")
+    var start = parseInt(parts[0], 10)
+    var end = parts[1]
       ? parseInt(parts[1], 10)
       : fileSize - 1
 
@@ -88,20 +92,20 @@ app.get('/video', function (req, res) {
       return;
     }
 
-    const chunksize = (end - start) + 1
-    const file = fs.createReadStream(path, { start, end })
-    const head = {
+    var chunksize = (end - start) + 1
+    var file = fs.createReadStream(path, { start, end })
+    var head = {
       'Content-Range': `bytes ${start}-${end}/${fileSize}`,
       'Accept-Ranges': 'bytes',
       'Content-Length': chunksize,
-      'Content-Type': 'video/mp4',
+      'Content-Type': 'video/' + videotype,
     }
     res.writeHead(206, head)
     file.pipe(res)
   } else {
-    const head = {
+    var head = {
       'Content-Length': fileSize,
-      'Content-Type': 'video/mp4',
+      'Content-Type': 'video/' + videotype,
     }
     res.writeHead(200, head)
     fs.createReadStream(path).pipe(res)
@@ -116,7 +120,7 @@ app.route('/fileupload').post((req, res, next) => {
     console.log(`Upload of '${filename}' started`);
 
     // Create a write stream of the new file
-    const fstream = fs.createWriteStream(path.join('./assets/', filename));
+    var fstream = fs.createWriteStream(path.join('./assets/', filename));
     // Pipe it trough
     file.pipe(fstream);
 
