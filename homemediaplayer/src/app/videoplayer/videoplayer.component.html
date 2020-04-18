@@ -1,22 +1,21 @@
 
-<video #media [vgMedia]="media" id="singleVideo" preload="auto" controls="true">
-	<source src="{{videoname$}}" type="video/mp4">
-</video>
+<h1 style="color: whitesmoke; font-size: 26px;">{{rawvideoname$}}</h1>
+<div id="videoContainer" style="max-width: 100%; max-height: 50vh; width:100%;">
+	<video #media [vgMedia]="media" id="singleVideo" preload="auto" controls="true" style="max-width: 100%; max-height: 50vh;">
+		<source src="{{videoname$}}" type="video/mp4">
+	</video>
+	<br>
 <br>
-<br>
-<span *ngIf="previousFile">
+<div *ngIf="previousFile">
 	<a [routerLink]="['/videoplayer']" [queryParams]="{video: previousFile }"
-	routerLinkActive="active">Previous:  {{previousFile}}</a>
-</span>
-&nbsp;
-&nbsp;
-&nbsp;
-&nbsp;
-<span *ngIf="nextFile">
+	routerLinkActive="active" style="float:left;">Previous Video</a>
+</div>
+<div *ngIf="nextFile">
 	<a [routerLink]="['/videoplayer']" [queryParams]="{video: nextFile }"
-	routerLinkActive="active">Next: {{nextFile}}</a>
-</span>
+	routerLinkActive="active" style="margin-left: 28%;">Next Video</a>
+</div>
 <br>
 <br>
 <a routerLink="/home" routerLinkActive="active">Back</a>
+</div>
 <router-outlet></router-outlet>
