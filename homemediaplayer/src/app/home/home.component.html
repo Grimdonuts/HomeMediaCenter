@@ -1,5 +1,5 @@
 <ul>
-	<li *ngFor="let fileName of videonames$">
+	<li *ngFor="let fileName of videonames">
 		<div *ngIf="fileName.folder">
 			<button class="accordion"
 					(click)="accordionclick($event)">-{{fileName.folder}}-</button>

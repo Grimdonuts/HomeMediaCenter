@@ -7,14 +7,14 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  videonames$ = [];
+  videonames = [];
 
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.http.get('http://192.168.1.19:3000/filenames').subscribe((res: string[]) => {
       res.forEach((data) => {
-          this.videonames$.push(data);
+          this.videonames.push(data);
       });
     });
   }
