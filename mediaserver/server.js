@@ -1,13 +1,13 @@
-const express = require('express');
-const fs = require('fs');
-const path = require('path');
-const app = express();
-const cors = require('cors');
-const busboy = require('connect-busboy');
+var express = require('express');
+var fs = require('fs');
+var path = require('path');
+var app = express();
+var cors = require('cors');
+var busboy = require('connect-busboy');
 
 var originsWhitelist = [
-  'http://localhost:4200',
   'http://192.168.1.19:4200',
+  'http://localhost:4200',
   'http://127.0.0.1:4200'
 ];
 
@@ -32,14 +32,13 @@ app.get('/', function (req, res) {
 });
 
 app.get('/filenames', function (req, res) {
-  const testFolder = './assets/';
-  const fileNames = [];
+  var testFolder = './assets/';
+  var fileNames = [];
 
   fs.readdirSync(testFolder).forEach(file => {
     if (path.extname(file) === '.mp4') {
       fileNames.push({ video: file, folder: null });
     } else if (path.extname(file) === '') {
-      console.log(path.extname(file));
       var videosinfolder = [];
       fs.readdirSync(testFolder + file).forEach(foldercontents => {
         videosinfolder.push({video: foldercontents});
@@ -50,9 +49,35 @@ app.get('/filenames', function (req, res) {
   res.send(fileNames);
 });
 
+app.get('/foldercheck', function (req, res) {
+  var videoname = req.query.filename;
+  var list = fs.readdirSync('./assets/');
+  var nextprevious = [];
+  if (!list.includes(videoname)) {
+    list.forEach((file) => {
+      if (fs.statSync('./assets/' + file).isDirectory()) {
+        var foldercontents = fs.readdirSync('./assets/' + file);
+        if (foldercontents.includes(videoname)) {
+          var index = foldercontents.indexOf(videoname);
+          var previousFile = "";
+          var nextFile = "";
+          if (index !== 0 && nextprevious.length === 0) {
+            previousFile = foldercontents[index - 1];
+          } 
+          if (index !== foldercontents.length) {
+            nextFile = foldercontents[index + 1];
+          }
+          nextprevious.push({previous: previousFile, next: nextFile});
+        }
+      }
+    });
+  }
+  res.send(nextprevious);
+});
+
 app.get('/video', function (req, res) {
-  const videoname = req.param("video");
-  const list = fs.readdirSync('./assets/');
+  var videoname = req.query.video;
+  var list = fs.readdirSync('./assets/');
   var path = "";
   if (list.includes(videoname)) {
     path = './assets/' + videoname;
@@ -64,22 +89,22 @@ app.get('/video', function (req, res) {
           path = './assets/' + file + '/' + videoname;
         }
       }
-    })
+    });
   }
 
   if (path === '') {
     res.status(500).send('Bad Request');
     return;
   }
-  const stat = fs.statSync(path);
-  const fileSize = stat.size;
+  var stat = fs.statSync(path);
+  var fileSize = stat.size;
 
-  const range = req.headers.range
+  var range = req.headers.range
 
   if (range) {
-    const parts = range.replace(/bytes=/, "").split("-")
-    const start = parseInt(parts[0], 10)
-    const end = parts[1]
+    var parts = range.replace(/bytes=/, "").split("-")
+    var start = parseInt(parts[0], 10)
+    var end = parts[1]
       ? parseInt(parts[1], 10)
       : fileSize - 1
 
@@ -88,9 +113,9 @@ app.get('/video', function (req, res) {
       return;
     }
 
-    const chunksize = (end - start) + 1
-    const file = fs.createReadStream(path, { start, end })
-    const head = {
+    var chunksize = (end - start) + 1
+    var file = fs.createReadStream(path, { start, end })
+    var head = {
       'Content-Range': `bytes ${start}-${end}/${fileSize}`,
       'Accept-Ranges': 'bytes',
       'Content-Length': chunksize,
@@ -99,7 +124,7 @@ app.get('/video', function (req, res) {
     res.writeHead(206, head)
     file.pipe(res)
   } else {
-    const head = {
+    var head = {
       'Content-Length': fileSize,
       'Content-Type': 'video/mp4',
     }
@@ -116,7 +141,7 @@ app.route('/fileupload').post((req, res, next) => {
     console.log(`Upload of '${filename}' started`);
 
     // Create a write stream of the new file
-    const fstream = fs.createWriteStream(path.join('./assets/', filename));
+    var fstream = fs.createWriteStream(path.join('./assets/', filename));
     // Pipe it trough
     file.pipe(fstream);
 

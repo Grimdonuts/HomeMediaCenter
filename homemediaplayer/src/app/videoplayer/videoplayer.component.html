@@ -4,4 +4,19 @@
 </video>
 <br>
 <br>
+<span *ngIf="previousFile">
+	<a [routerLink]="['/videoplayer']" [queryParams]="{video: previousFile }"
+	routerLinkActive="active">Previous:  {{previousFile}}</a>
+</span>
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+<span *ngIf="nextFile">
+	<a [routerLink]="['/videoplayer']" [queryParams]="{video: nextFile }"
+	routerLinkActive="active">Next: {{nextFile}}</a>
+</span>
+<br>
+<br>
 <a routerLink="/home" routerLinkActive="active">Back</a>
+<router-outlet></router-outlet>
