@@ -1,18 +1,18 @@
 
 <h1 style="color: whitesmoke; font-size: 26px;">{{rawvideoname$}}</h1>
-<div id="videoContainer" style="max-width: 100%; max-height: 50vh; width:100%;">
-	<video #media [vgMedia]="media" id="singleVideo" preload="auto" controls="true" style="max-width: 100%; max-height: 50vh;">
+<div id="videoContainer" style="max-width: 100%; max-height: 50vh; width:75%;">
+	<video #media [vgMedia]="media" id="singleVideo" preload="auto" controls="true" style="width: 100%;">
 		<source src="{{videoname$}}" type="video/mp4">
 	</video>
 	<br>
 <br>
 <div *ngIf="previousFile">
 	<a [routerLink]="['/videoplayer']" [queryParams]="{video: previousFile }"
-	routerLinkActive="active" style="float:left;">Previous Video</a>
+	routerLinkActive="active" style="float:left;">Previous</a>
 </div>
 <div *ngIf="nextFile">
 	<a [routerLink]="['/videoplayer']" [queryParams]="{video: nextFile }"
-	routerLinkActive="active" style="margin-left: 28%;">Next Video</a>
+	routerLinkActive="active" style="float:right;">Next</a>
 </div>
 <br>
 <br>
