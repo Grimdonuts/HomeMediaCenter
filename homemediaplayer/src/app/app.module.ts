@@ -2,8 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
  
 import { AppComponent } from './app.component';
-import { VgCoreModule } from 'videogular2/compiled/core';
-import { VgControlsModule } from 'videogular2/compiled/controls';
 import { HomeComponent } from './home/home.component';
 import { VideoplayerComponent } from './videoplayer/videoplayer.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -27,9 +25,7 @@ const appRoutes: Routes = [
    imports: [
        RouterModule.forRoot(appRoutes),
        BrowserModule,
-       HttpClientModule,
-       VgCoreModule,
-       VgControlsModule
+       HttpClientModule
    ],
    providers: [],
    bootstrap: [ AppComponent ]
