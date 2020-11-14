@@ -34,17 +34,20 @@ app.get('/', function (req, res) {
 app.get('/filenames', function (req, res) {
   var testFolder = './assets/';
   var fileNames = [];
+  var fileIndex = 0;
 
   fs.readdirSync(testFolder).forEach(file => {
     if (path.extname(file) === '.mp4') {
-      fileNames.push({ video: file, folder: null });
+      var imageFile = file.replace('.mp4', '.jpg');
+      fileNames.push({ video: file, folder: null, image: imageFile, index: fileIndex });
     } else if (path.extname(file) === '') {
       var videosinfolder = [];
       fs.readdirSync(testFolder + file).forEach(foldercontents => {
         videosinfolder.push({video: foldercontents});
       });
-      fileNames.push({ folder: file, children: videosinfolder });
+      fileNames.push({ folder: file, image: file + '.jpg', index: fileIndex, children: videosinfolder });
     }
+    fileIndex++;
   });
   res.send(fileNames);
 });
@@ -132,20 +135,35 @@ app.get('/video', function (req, res) {
     fs.createReadStream(path).pipe(res)
   }
 });
-// Handle the upload post request
-app.route('/fileupload').post((req, res, next) => {
 
-  req.pipe(req.busboy); // Pipe it trough busboy
+app.get('/image', function (req, res) {
+  var seriesname = req.query.video;
+  var list = fs.readdirSync('./assets/');
+  var path = "";
+  if (list.includes(seriesname)) {
+    path = '/assets/' + seriesname;
+  } else {
+    list.forEach((file) => {
+      if (fs.statSync('./assets/' + file).isDirectory()) {
+        var foldercontents = fs.readdirSync('./assets/' + file);
+        if (foldercontents.includes(seriesname)) {
+          path = '/assets/' + file + '/' + seriesname;
+        }
+      }
+    });
+  }
+  res.sendFile(__dirname + path);
+ });
+
+app.route('/fileupload').post((req, res, next) => {
+  req.pipe(req.busboy);
 
   req.busboy.on('file', (fieldname, file, filename) => {
     console.log(`Upload of '${filename}' started`);
 
-    // Create a write stream of the new file
     var fstream = fs.createWriteStream(path.join('./assets/', filename));
-    // Pipe it trough
     file.pipe(fstream);
 
-    // On finish of the upload
     fstream.on('close', () => {
       console.log(`Upload of '${filename}' finished`);
       res.redirect('back');
