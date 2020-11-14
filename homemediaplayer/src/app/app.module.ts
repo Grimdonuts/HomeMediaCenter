@@ -23,7 +23,7 @@ const appRoutes: Routes = [
        VideoplayerComponent
    ],
    imports: [
-       RouterModule.forRoot(appRoutes),
+       RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
        BrowserModule,
        HttpClientModule
    ],
