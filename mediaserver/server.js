@@ -62,8 +62,8 @@ app.get('/foldercheck', function (req, res) {
         var foldercontents = fs.readdirSync('./assets/' + file);
         if (foldercontents.includes(videoname)) {
           var index = foldercontents.indexOf(videoname);
-          var previousFile = "";
-          var nextFile = "";
+          var previousFile = '';
+          var nextFile = '';
           if (index !== 0 && nextprevious.length === 0) {
             previousFile = foldercontents[index - 1];
           } 
@@ -81,7 +81,7 @@ app.get('/foldercheck', function (req, res) {
 app.get('/video', function (req, res) {
   var videoname = req.query.video;
   var list = fs.readdirSync('./assets/');
-  var path = "";
+  var path = '';
   if (list.includes(videoname)) {
     path = './assets/' + videoname;
   } else {
@@ -105,7 +105,7 @@ app.get('/video', function (req, res) {
   var range = req.headers.range
 
   if (range) {
-    var parts = range.replace(/bytes=/, "").split("-")
+    var parts = range.replace(/bytes=/, '').split('-')
     var start = parseInt(parts[0], 10)
     var end = parts[1]
       ? parseInt(parts[1], 10)
@@ -139,7 +139,7 @@ app.get('/video', function (req, res) {
 app.get('/image', function (req, res) {
   var seriesname = req.query.video;
   var list = fs.readdirSync('./assets/');
-  var path = "";
+  var path = '';
   if (list.includes(seriesname)) {
     path = '/assets/' + seriesname;
   } else {
@@ -166,8 +166,10 @@ app.route('/fileupload').post((req, res, next) => {
 
     fstream.on('close', () => {
       console.log(`Upload of '${filename}' finished`);
-      res.redirect('back');
     });
+  });
+  req.busboy.on('finish', ()=> {
+    res.redirect(req.get('referer') + 'upload');
   });
 });
 

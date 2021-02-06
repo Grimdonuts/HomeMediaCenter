@@ -6,10 +6,12 @@ import { HomeComponent } from './home/home.component';
 import { VideoplayerComponent } from './videoplayer/videoplayer.component';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
+import { UploadComponent } from './upload/upload.component';
  
 const appRoutes: Routes = [
     { path: 'videoplayer', component: VideoplayerComponent },
     { path: 'home', component: HomeComponent },
+    { path: 'upload', component: UploadComponent },
     { path: '',
       redirectTo: '/home',
       pathMatch: 'full'
@@ -20,7 +22,8 @@ const appRoutes: Routes = [
    declarations: [
        AppComponent,
        HomeComponent,
-       VideoplayerComponent
+       VideoplayerComponent,
+       UploadComponent
    ],
    imports: [
        RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
