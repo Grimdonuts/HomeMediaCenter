@@ -19,5 +19,6 @@
 FROM node:14.15.4-buster-slim
 WORKDIR /usr/src/app
 COPY . .
+RUN npm install -g @angular/cli
 EXPOSE 4200
-CMD ["/usr/src/app/node_modules/.bin/ng", "serve", "--prod=true", "--host=0.0.0.0", "--source-map=false", "--live-reload=false"]
+CMD ["ng", "serve", "--prod=true", "--host=0.0.0.0", "--source-map=false", "--live-reload=false"]
