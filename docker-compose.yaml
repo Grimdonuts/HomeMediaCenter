@@ -3,6 +3,7 @@ version: '3'
 services:
   mediaserver:
     build:
+      network: host
       context: ./mediaserver
       dockerfile: Dockerfile
     image: mediaserver
@@ -16,4 +17,18 @@ services:
         target: /usr/src/app/assets
       - type: bind
         source: /media/disk/HomeMediaCenter/mediaserver/node_modules
+        target: /usr/src/app/node_modules
+
+  homemediaplayer:
+    build:
+      context: ./homemediaplayer
+      dockerfile: Dockerfile
+    image: homemediaplayer
+    container_name: homemediaplayer
+    restart: unless-stopped
+    ports:
+      - "4200:4200"
+    volumes:
+      - type: bind
+        source: /media/disk/HomeMediaCenter/homemediaplayer/node_modules
         target: /usr/src/app/node_modules
