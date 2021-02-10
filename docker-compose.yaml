@@ -43,5 +43,7 @@ services:
     ports:
       - "27017:27017"
     environment:
-    - MONGO_USER=jnelson
-    - MONGO_PASS=pass
+      - MONGO_INITDB_ROOT_USERNAME=admin-user
+      - MONGO_INITDB_ROOT_PASSWORD=admin-password
+      - MONGO_USER=jnelson
+      - MONGO_PASS=pass
