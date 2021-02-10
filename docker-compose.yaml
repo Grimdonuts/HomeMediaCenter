@@ -32,3 +32,16 @@ services:
       - type: bind
         source: /media/disk/HomeMediaCenter/homemediaplayer/node_modules
         target: /usr/src/app/node_modules
+
+  mongo:
+    build:
+      context: ./mongo
+      dockerfile: Dockerfile
+    image: mongo
+    container_name: mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+    - MONGO_USER=jnelson
+    - MONGO_PASS=pass
