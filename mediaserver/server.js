@@ -27,6 +27,9 @@ app.use(busboy({
   highWaterMark: 2 * 1024 * 1024, // Set 2MiB buffer
 }));
 
+app.use(express.urlencoded());
+app.use(express.json());
+
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname + '/index.htm'));
 });
@@ -155,7 +158,7 @@ app.get('/image', function (req, res) {
   res.sendFile(__dirname + path);
  });
 
-app.route('/fileupload').post((req, res, next) => {
+app.post('/fileupload', (req, res) => {
   req.pipe(req.busboy);
 
   req.busboy.on('file', (fieldname, file, filename) => {
@@ -171,6 +174,10 @@ app.route('/fileupload').post((req, res, next) => {
   req.busboy.on('finish', ()=> {
     res.redirect(req.get('referer') + 'upload');
   });
+});
+
+app.post('/playlistcreate', (req, res) => {
+  console.log(req.body);
 });
 
 app.listen(3000, function () {
