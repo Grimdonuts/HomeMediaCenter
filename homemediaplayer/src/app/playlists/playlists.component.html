@@ -1,0 +1,22 @@
+<table>
+	<ng-container *ngFor="let fileName of videonames; let i = index">
+		<tr>
+			<td style="width: auto;">
+				<div *ngIf="fileName.folder">
+					<input type="checkbox" class="option{{i}}" id="{{fileName.folder}}" (click)="checkDescendants($event)" /><label class="listText"
+						for="{{fileName.folder}}">{{fileName.folder}}</label>
+					<ng-container *ngFor="let videochildren of fileName.children">
+						<br />
+						<input type="checkbox" class="option{{i}}" id="{{videochildren.video}}" (click)="checkParent($event)" style="margin-left: 20px;" /><label class="listText"
+							for="{{videochildren.video}}">{{videochildren.video}}</label>
+					</ng-container>
+					<br />
+				</div>
+				<div *ngIf="fileName.video && fileName.folder === null">
+					<input type="checkbox" class="option{{i}}" id="{{fileName.video}}" /><label class="listText"
+						for="{{fileName.video}}">{{fileName.video}}</label>
+				</div>
+			</td>
+		</tr>
+	</ng-container>
+</table>

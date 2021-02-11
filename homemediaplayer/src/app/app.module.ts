@@ -7,11 +7,13 @@ import { VideoplayerComponent } from './videoplayer/videoplayer.component';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { UploadComponent } from './upload/upload.component';
+import { PlaylistsComponent } from './playlists/playlists.component';
  
 const appRoutes: Routes = [
     { path: 'videoplayer', component: VideoplayerComponent },
     { path: 'home', component: HomeComponent },
     { path: 'upload', component: UploadComponent },
+    { path: 'playlists', component: PlaylistsComponent },
     { path: '',
       redirectTo: '/home',
       pathMatch: 'full'
@@ -23,7 +25,8 @@ const appRoutes: Routes = [
        AppComponent,
        HomeComponent,
        VideoplayerComponent,
-       UploadComponent
+       UploadComponent,
+       PlaylistsComponent
    ],
    imports: [
        RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),

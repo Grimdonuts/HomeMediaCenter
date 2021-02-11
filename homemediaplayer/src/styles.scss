@@ -9,3 +9,44 @@ a {
 body {
 	background-color: darkslategray;
 }
+
+.accordion {
+    border: none;
+    outline: none;
+    transition: 0.4s;
+	opacity: 0.8;
+	font-size: 20px;
+	text-decoration: none;
+	color: whitesmoke;
+	background-color: rgb(54, 54, 54);
+	box-shadow: gray inset 0px 0px 0px 2px;
+	display: block;
+	margin: auto;
+	height: 70px;
+	cursor: pointer;
+}
+
+.listContent {
+	text-align: center;
+}
+
+td {
+	vertical-align: top;
+	width: 300px;
+	height: auto;
+}
+
+.panel {
+	display: none;
+	margin: auto;
+	width: max-content;
+	border: whitesmoke;
+	border-style: solid;
+	background-color: rgb(54, 54, 54);
+}
+
+img {
+	height: 300px;
+	width: 250px;
+	cursor: pointer;
+}

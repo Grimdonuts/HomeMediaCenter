@@ -27,8 +27,8 @@ export class VideoplayerComponent implements OnInit {
       res.forEach((data) => {
         this.previousFile = data["previous"];
         this.nextFile = data["next"];
-        var video = document.getElementById('singleVideo');
-        var routerr = this.router;
+        let video = document.getElementById('singleVideo');
+        let routerr = this.router;
         video.addEventListener('ended', function () {
           if (data["next"].length > 0) {
             routerr.navigate(['/videoplayer'], { queryParams: { 'video': data["next"] } });
