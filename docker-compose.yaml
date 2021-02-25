@@ -11,6 +11,9 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
+    environment:
+      - MONGO_USER=jnelson
+      - MONGO_PASS=pass
     volumes:
       - type: bind
         source: /media/disk/HomeMediaCenter/mediaserver/assets
@@ -42,10 +45,7 @@ services:
     restart: unless-stopped
     ports:
       - "27017:27017"
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin-user
-      - MONGO_INITDB_ROOT_PASSWORD=admin-password
-      - MONGO_USER=jnelson
-      - MONGO_PASS=pass
     volumes:
-      - mongo-data:/var/lib/mongodb
+      - type: bind
+        source: /media/disk/mongo-data/
+        target: /mongo-data/

@@ -21,4 +21,4 @@ WORKDIR /usr/src/app
 COPY . .
 RUN npm install -g @angular/cli
 EXPOSE 4200
-CMD ["ng", "serve", "--prod=true", "--host=0.0.0.0", "--source-map=false", "--live-reload=false"]
+CMD ["ng", "serve", "--prod=true", "--host=0.0.0.0", "--live-reload=false"]

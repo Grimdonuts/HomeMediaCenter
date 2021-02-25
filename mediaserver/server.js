@@ -9,8 +9,17 @@ const mongoose = require('mongoose');
 const modPlaylists = require('./model/model').Playlists;
 
 const db = mongoose.connection;
-mongoose.connect('mongodb://192.168.1.19:27017/mediaserver', {useNewUrlParser: true, useUnifiedTopology: true}); // mongodb://user:pass@address:port/dbname
-db.on('error', console.error.bind(console, 'connection error:')); // 'mongodb://' + process.env.MONGO_USER + ':' + process.env.MONGO_PASS + '@192.168.1.19:27017/mediaserver'
+const mongoUrl = 'mongodb://' + process.env.MONGO_USER + ':' + process.env.MONGO_PASS + '@192.168.1.19:27017/mediaserver';
+var connectWithRetry = function() {
+  return mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true }, function(err) {
+    if (err) {
+      console.error('Failed to connect to mongo on startup - retrying in 15 sec', err);
+      setTimeout(connectWithRetry, 15000);
+    }
+  });
+};
+connectWithRetry();
+db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
   console.log("Connected to the DB");
 });
@@ -203,7 +212,7 @@ app.post('/playlistcreate', async (req, res) => {
 
   let dbRecord = await modPlaylists.findOne({ playlistname: playlistName });
   let redirectPath = req.get('referer').replace('createplaylist', '');
-  res.redirect(redirectPath + 'playlistorder?id='+ dbRecord.id);
+  res.redirect(redirectPath + 'playlistorder?id=' + dbRecord.id);
 });
 
 app.get('/playlist', async (req, res) => {
@@ -224,7 +233,7 @@ app.post('/playlistorder', async (req, res) => {
   for (let i = 0; i < playlistArray.length; i++) {
     playlistArray[i] = playlistArray[i].replace('"', '').replace('"', '');
   }
-  await modPlaylists.updateOne({ _id: playlistId }, { $set: { videos: playlistArray }});
+  await modPlaylists.updateOne({ _id: playlistId }, { $set: { videos: playlistArray } });
   let redirectPath = req.get('referer').replace('playlistorder', '');
   res.redirect(redirectPath + 'playlists');
 });
