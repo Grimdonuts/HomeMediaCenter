@@ -1,19 +1,29 @@
-var express = require('express');
-var fs = require('fs');
-var path = require('path');
-var app = express();
-var cors = require('cors');
-var busboy = require('connect-busboy');
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
+const app = express();
+const cors = require('cors');
+const busboy = require('connect-busboy');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const modPlaylists = require('./model/model').Playlists;
 
-var originsWhitelist = [
+const db = mongoose.connection;
+mongoose.connect('mongodb://192.168.1.19:27017/mediaserver', {useNewUrlParser: true, useUnifiedTopology: true}); // mongodb://user:pass@address:port/dbname
+db.on('error', console.error.bind(console, 'connection error:')); // 'mongodb://' + process.env.MONGO_USER + ':' + process.env.MONGO_PASS + '@192.168.1.19:27017/mediaserver'
+db.once('open', () => {
+  console.log("Connected to the DB");
+});
+
+const originsWhitelist = [
   'http://192.168.1.19:4200',
   'http://localhost:4200',
   'http://127.0.0.1:4200'
 ];
 
-var corsOptions = {
-  origin: function (origin, callback) {
-    var isWhitelisted = originsWhitelist.indexOf(origin) !== -1;
+const corsOptions = {
+  origin: (origin, callback) => {
+    const isWhitelisted = originsWhitelist.indexOf(origin) !== -1;
     callback(null, isWhitelisted);
   },
   credentials: true
@@ -27,26 +37,28 @@ app.use(busboy({
   highWaterMark: 2 * 1024 * 1024, // Set 2MiB buffer
 }));
 
-app.use(express.urlencoded());
-app.use(express.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
 
-app.get('/', function (req, res) {
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + '/index.htm'));
 });
 
-app.get('/filenames', function (req, res) {
-  var testFolder = './assets/';
-  var fileNames = [];
-  var fileIndex = 0;
+app.get('/filenames', (req, res) => {
+  let testFolder = './assets/';
+  let fileNames = [];
+  let fileIndex = 0;
 
   fs.readdirSync(testFolder).forEach(file => {
     if (path.extname(file) === '.mp4') {
-      var imageFile = file.replace('.mp4', '.jpg');
+      let imageFile = file.replace('.mp4', '.jpg');
       fileNames.push({ video: file, folder: null, image: imageFile, index: fileIndex });
     } else if (path.extname(file) === '') {
-      var videosinfolder = [];
+      let videosinfolder = [];
       fs.readdirSync(testFolder + file).forEach(foldercontents => {
-        videosinfolder.push({video: foldercontents});
+        videosinfolder.push({ video: foldercontents });
       });
       fileNames.push({ folder: file, image: file + '.jpg', index: fileIndex, children: videosinfolder });
     }
@@ -55,25 +67,25 @@ app.get('/filenames', function (req, res) {
   res.send(fileNames);
 });
 
-app.get('/foldercheck', function (req, res) {
-  var videoname = req.query.filename;
-  var list = fs.readdirSync('./assets/');
-  var nextprevious = [];
+app.get('/foldercheck', (req, res) => {
+  let videoname = req.query.filename;
+  let list = fs.readdirSync('./assets/');
+  let nextprevious = [];
   if (!list.includes(videoname)) {
     list.forEach((file) => {
       if (fs.statSync('./assets/' + file).isDirectory()) {
-        var foldercontents = fs.readdirSync('./assets/' + file);
+        let foldercontents = fs.readdirSync('./assets/' + file);
         if (foldercontents.includes(videoname)) {
-          var index = foldercontents.indexOf(videoname);
-          var previousFile = '';
-          var nextFile = '';
+          let index = foldercontents.indexOf(videoname);
+          let previousFile = '';
+          let nextFile = '';
           if (index !== 0 && nextprevious.length === 0) {
             previousFile = foldercontents[index - 1];
-          } 
+          }
           if (index !== foldercontents.length) {
             nextFile = foldercontents[index + 1];
           }
-          nextprevious.push({previous: previousFile, next: nextFile});
+          nextprevious.push({ previous: previousFile, next: nextFile });
         }
       }
     });
@@ -81,16 +93,16 @@ app.get('/foldercheck', function (req, res) {
   res.send(nextprevious);
 });
 
-app.get('/video', function (req, res) {
-  var videoname = req.query.video;
-  var list = fs.readdirSync('./assets/');
-  var path = '';
+app.get('/video', (req, res) => {
+  let videoname = req.query.video;
+  let list = fs.readdirSync('./assets/');
+  let path = '';
   if (list.includes(videoname)) {
     path = './assets/' + videoname;
   } else {
     list.forEach((file) => {
       if (fs.statSync('./assets/' + file).isDirectory()) {
-        var foldercontents = fs.readdirSync('./assets/' + file);
+        let foldercontents = fs.readdirSync('./assets/' + file);
         if (foldercontents.includes(videoname)) {
           path = './assets/' + file + '/' + videoname;
         }
@@ -102,15 +114,15 @@ app.get('/video', function (req, res) {
     res.status(500).send('Bad Request');
     return;
   }
-  var stat = fs.statSync(path);
-  var fileSize = stat.size;
+  let stat = fs.statSync(path);
+  let fileSize = stat.size;
 
-  var range = req.headers.range
+  let range = req.headers.range
 
   if (range) {
-    var parts = range.replace(/bytes=/, '').split('-')
-    var start = parseInt(parts[0], 10)
-    var end = parts[1]
+    let parts = range.replace(/bytes=/, '').split('-')
+    let start = parseInt(parts[0], 10)
+    let end = parts[1]
       ? parseInt(parts[1], 10)
       : fileSize - 1
 
@@ -119,9 +131,9 @@ app.get('/video', function (req, res) {
       return;
     }
 
-    var chunksize = (end - start) + 1
-    var file = fs.createReadStream(path, { start, end })
-    var head = {
+    let chunksize = (end - start) + 1
+    let file = fs.createReadStream(path, { start, end })
+    let head = {
       'Content-Range': `bytes ${start}-${end}/${fileSize}`,
       'Accept-Ranges': 'bytes',
       'Content-Length': chunksize,
@@ -130,7 +142,7 @@ app.get('/video', function (req, res) {
     res.writeHead(206, head)
     file.pipe(res)
   } else {
-    var head = {
+    let head = {
       'Content-Length': fileSize,
       'Content-Type': 'video/mp4',
     }
@@ -139,16 +151,16 @@ app.get('/video', function (req, res) {
   }
 });
 
-app.get('/image', function (req, res) {
-  var seriesname = req.query.video;
-  var list = fs.readdirSync('./assets/');
-  var path = '';
+app.get('/image', (req, res) => {
+  let seriesname = req.query.video;
+  let list = fs.readdirSync('./assets/');
+  let path = '';
   if (list.includes(seriesname)) {
     path = '/assets/' + seriesname;
   } else {
     list.forEach((file) => {
       if (fs.statSync('./assets/' + file).isDirectory()) {
-        var foldercontents = fs.readdirSync('./assets/' + file);
+        let foldercontents = fs.readdirSync('./assets/' + file);
         if (foldercontents.includes(seriesname)) {
           path = '/assets/' + file + '/' + seriesname;
         }
@@ -156,7 +168,7 @@ app.get('/image', function (req, res) {
     });
   }
   res.sendFile(__dirname + path);
- });
+});
 
 app.post('/fileupload', (req, res) => {
   req.pipe(req.busboy);
@@ -164,22 +176,59 @@ app.post('/fileupload', (req, res) => {
   req.busboy.on('file', (fieldname, file, filename) => {
     console.log(`Upload of '${filename}' started`);
 
-    var fstream = fs.createWriteStream(path.join('./assets/', filename));
+    let fstream = fs.createWriteStream(path.join('./assets/', filename));
     file.pipe(fstream);
 
     fstream.on('close', () => {
       console.log(`Upload of '${filename}' finished`);
     });
   });
-  req.busboy.on('finish', ()=> {
+  req.busboy.on('finish', () => {
     res.redirect(req.get('referer') + 'upload');
   });
 });
 
-app.post('/playlistcreate', (req, res) => {
-  console.log(req.body);
+app.post('/playlistcreate', async (req, res) => {
+  let playlistBody = JSON.stringify(req.body).replace('{', '').replace('}', '');
+  let playlistArray = playlistBody.split(',');
+  let playlistName = playlistArray.pop().replace('"playlistname":"', '').replace('"', '');
+  for (let i = 0; i < playlistArray.length; i++) {
+    playlistArray[i] = playlistArray[i].replace('":"on"', '').replace('"', '');
+  }
+
+  await modPlaylists.create({
+    playlistname: playlistName,
+    videos: playlistArray
+  });
+
+  let dbRecord = await modPlaylists.findOne({ playlistname: playlistName });
+  let redirectPath = req.get('referer').replace('createplaylist', '');
+  res.redirect(redirectPath + 'playlistorder?id='+ dbRecord.id);
 });
 
-app.listen(3000, function () {
+app.get('/playlist', async (req, res) => {
+  let playlistid = req.query.id;
+  let dbRecord = await modPlaylists.findOne({ _id: playlistid });
+  res.send(dbRecord);
+});
+
+app.get('/playlists', async (req, res) => {
+  let dbRecord = await modPlaylists.find();
+  res.send(dbRecord);
+});
+
+app.post('/playlistorder', async (req, res) => {
+  let playlistBody = JSON.stringify(req.body).replace('{"video":[', '').replace('}', '').replace(']', '');
+  let playlistArray = playlistBody.split(',');
+  let playlistId = playlistArray.pop().replace('"playlistId":"', '').replace('"', '');
+  for (let i = 0; i < playlistArray.length; i++) {
+    playlistArray[i] = playlistArray[i].replace('"', '').replace('"', '');
+  }
+  await modPlaylists.updateOne({ _id: playlistId }, { $set: { videos: playlistArray }});
+  let redirectPath = req.get('referer').replace('playlistorder', '');
+  res.redirect(redirectPath + 'playlists');
+});
+
+app.listen(3000, () => {
   console.log('Listening on port 3000!')
 });

@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -8,11 +8,10 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./videoplayer.component.scss']
 })
 export class VideoplayerComponent implements OnInit {
-  @Input() video: any;
   videoname: string = "";
   rawvideoname: string = "";
-  nextFile = "";
-  previousFile = "";
+  nextFile: string = "";
+  previousFile: string = "";
   videoSubscription: any;
   constructor(private router: Router, private route: ActivatedRoute, private http: HttpClient) {
     this.router.routeReuseStrategy.shouldReuseRoute = function () {

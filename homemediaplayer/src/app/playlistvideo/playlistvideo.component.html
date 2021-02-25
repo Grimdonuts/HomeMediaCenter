@@ -1,0 +1,30 @@
+<h1 style="color: whitesmoke; font-size: 26px; display: inline-block;">{{rawvideoname}}</h1>
+<button class="accordionPlaylist" style="margin-left:20px;" (click)="accordionclick($event)">|||</button>
+<div class="panelPlaylist" style="z-index: 1;">
+	<ng-container *ngFor="let playlistvideo of playlistsArray">
+		<br />
+		<a [routerLink]="['/playlistvideo']" [queryParams]="{ video: playlistvideo, playlistid: playlistid }"
+			routerLinkActive="active">{{playlistvideo}}</a>
+		<br />
+	</ng-container>
+	<br />
+</div>
+<div id="videoContainer" style="max-width: 75vw; max-height: 50vh; z-index: 0;">
+	<video #media id="singleVideo" preload="auto" controls="true" style="width: 100%;" autoplay disablePictureInPicture
+		controlsList="nodownload">
+		<source src="{{videoname}}" type="video/mp4">
+	</video>
+	<br>
+	<br>
+	<div *ngIf="previousFile">
+		<a [routerLink]="['/playlistvideo']" [queryParams]="{ video: previousFile, playlistid: playlistid }"
+			routerLinkActive="active" style="float:left;">Previous</a>
+	</div>
+	<div *ngIf="nextFile">
+		<a [routerLink]="['/playlistvideo']" [queryParams]="{ video: nextFile, playlistid: playlistid }"
+			routerLinkActive="active" style="float:right;">Next</a>
+	</div>
+	<br>
+	<br>
+	<a routerLink="/playlists" routerLinkActive="active">Back</a>
+</div>

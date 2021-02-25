@@ -47,3 +47,5 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=admin-password
       - MONGO_USER=jnelson
       - MONGO_PASS=pass
+    volumes:
+      - mongo-data:/var/lib/mongodb

@@ -9,6 +9,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { UploadComponent } from './upload/upload.component';
 import { PlaylistsComponent } from './playlists/playlists.component';
 import { CreateplaylistComponent } from './createplaylist/createplaylist.component';
+import { PlaylistorderComponent } from './playlistorder/playlistorder.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { PlaylistvideoComponent } from './playlistvideo/playlistvideo.component';
  
 const appRoutes: Routes = [
     { path: 'videoplayer', component: VideoplayerComponent },
@@ -16,6 +20,8 @@ const appRoutes: Routes = [
     { path: 'upload', component: UploadComponent },
     { path: 'playlists', component: PlaylistsComponent },
     { path: 'createplaylist', component: CreateplaylistComponent },
+    { path: 'playlistorder', component: PlaylistorderComponent },
+    { path: 'playlistvideo', component: PlaylistvideoComponent },
     { path: '',
       redirectTo: '/home',
       pathMatch: 'full'
@@ -29,12 +35,16 @@ const appRoutes: Routes = [
        VideoplayerComponent,
        UploadComponent,
        PlaylistsComponent,
-       CreateplaylistComponent
+       CreateplaylistComponent,
+       PlaylistorderComponent,
+       PlaylistvideoComponent
    ],
    imports: [
        RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
        BrowserModule,
-       HttpClientModule
+       HttpClientModule,
+       BrowserAnimationsModule,
+       DragDropModule
    ],
    providers: [],
    bootstrap: [ AppComponent ]

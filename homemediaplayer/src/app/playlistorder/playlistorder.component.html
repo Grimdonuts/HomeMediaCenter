@@ -1,0 +1,9 @@
+<form method="POST" action="http://192.168.1.19:3000/playlistorder">
+	<div cdkDropList [cdkDropListData]="playlistVideos" class="itemlist" (cdkDropListDropped)="drop($event)">
+		<div class="item" *ngFor="let videoName of playlistVideos" cdkDrag>{{videoName}}<input type="hidden" name="video" value="{{videoName}}"></div>
+	  </div>
+	<br />
+	<input type="hidden" name="playlistId" id="playlistId" value="{{id}}">
+	<br /><br />
+	<input type="submit" value="Change Order"/>
+</form>

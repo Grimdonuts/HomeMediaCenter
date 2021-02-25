@@ -1,4 +1,4 @@
-<form method="POST" action="http://localhost:4200/playlistorder">
+<form method="POST" action="http://192.168.1.19:3000/playlistcreate">
 	<table>
 		<ng-container *ngFor="let fileName of videonames; let i = index">
 			<tr>
@@ -23,5 +23,7 @@
 			</tr>
 		</ng-container>
 	</table>
+	<br />
+	<label>Playlist Name:</label><input type="text" name="playlistname" id="playlistname" required> <br /><br />
 	<input type="submit" value="Create"/>
 </form>

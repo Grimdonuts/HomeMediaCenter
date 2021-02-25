@@ -1,28 +1,38 @@
 <table>
+	<tr>
+		<td>
+			<br />
+			<a routerLink="/playlists" routerLinkActive="active">Playlists</a>
+			<br />
+			<br />
+		</td>
+	</tr>
 	<ng-container *ngFor="let fileName of videonames; let i = index">
 		<tr *ngIf="((i % 4) == 0)">
 			<ng-container *ngFor="let fileName of videonames; let j = index">
-			<td *ngIf="j >= i && j < i+4">
-				<div class="listContent" *ngIf="fileName.folder">
-					<img (click)="accordionclick($event)" src="http://192.168.1.19:3000/image?video={{fileName.image}}" />
-					<button class="accordion" (click)="accordionclick($event)">-{{fileName.folder}}-</button>
-					<div class="panel">
-						<ng-container *ngFor="let videochildren of fileName.children">
+				<td *ngIf="j >= i && j < i+4">
+					<div class="listContent" *ngIf="fileName.folder">
+						<img (click)="accordionclick($event)"
+							src="http://192.168.1.19:3000/image?video={{fileName.image}}" />
+						<button class="accordion" (click)="accordionclick($event)">-{{fileName.folder}}-</button>
+						<div class="panel">
+							<ng-container *ngFor="let videochildren of fileName.children">
+								<br />
+								<a [routerLink]="['/videoplayer']" [queryParams]="{ video: videochildren.video }"
+									routerLinkActive="active">{{videochildren.video}}</a>
+								<br />
+							</ng-container>
 							<br />
-							<a [routerLink]="['/videoplayer']" [queryParams]="{video: videochildren.video }"
-								routerLinkActive="active">{{videochildren.video}}</a>
-							<br />
-						</ng-container>
-						<br />
+						</div>
 					</div>
-				</div>
-				<div class="listContent" *ngIf="fileName.video && fileName.folder === null">
-					<img [routerLink]="['/videoplayer']" [queryParams]="{ video: fileName.video }"
-					routerLinkActive="active" src="http://192.168.1.19:3000/image?video={{fileName.image}}" />
-					<button class="accordion" [routerLink]="['/videoplayer']" [queryParams]="{ video: fileName.video }"
-						routerLinkActive="active">&nbsp;{{fileName.video}}&nbsp;</button>
-				</div>
-			</td>
+					<div class="listContent" *ngIf="fileName.video && fileName.folder === null">
+						<img [routerLink]="['/videoplayer']" [queryParams]="{ video: fileName.video }"
+							routerLinkActive="active" src="http://192.168.1.19:3000/image?video={{fileName.image}}" />
+						<button class="accordion" [routerLink]="['/videoplayer']"
+							[queryParams]="{ video: fileName.video }"
+							routerLinkActive="active">&nbsp;{{fileName.video}}&nbsp;</button>
+					</div>
+				</td>
 			</ng-container>
 		</tr>
 	</ng-container>

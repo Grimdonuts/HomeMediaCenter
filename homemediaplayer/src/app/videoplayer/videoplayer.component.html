@@ -1,20 +1,20 @@
-
 <h1 style="color: whitesmoke; font-size: 26px;">{{rawvideoname}}</h1>
 <div id="videoContainer" style="max-width: 75vw; max-height: 50vh;">
-	<video #media id="singleVideo" preload="auto" controls="true" style="width: 100%;" autoplay disablePictureInPicture controlsList="nodownload">
+	<video #media id="singleVideo" preload="auto" controls="true" style="width: 100%;" autoplay disablePictureInPicture
+		controlsList="nodownload">
 		<source src="{{videoname}}" type="video/mp4">
 	</video>
 	<br>
-<br>
-<div *ngIf="previousFile">
-	<a [routerLink]="['/videoplayer']" [queryParams]="{ video: previousFile }"
-	routerLinkActive="active" style="float:left;">Previous</a>
-</div>
-<div *ngIf="nextFile">
-	<a [routerLink]="['/videoplayer']" [queryParams]="{ video: nextFile }"
-	routerLinkActive="active" style="float:right;">Next</a>
-</div>
-<br>
-<br>
-<a routerLink="/home" routerLinkActive="active">Back</a>
+	<br>
+	<div *ngIf="previousFile">
+		<a [routerLink]="['/videoplayer']" [queryParams]="{ video: previousFile }" routerLinkActive="active"
+			style="float:left;">Previous</a>
+	</div>
+	<div *ngIf="nextFile">
+		<a [routerLink]="['/videoplayer']" [queryParams]="{ video: nextFile }" routerLinkActive="active"
+			style="float:right;">Next</a>
+	</div>
+	<br>
+	<br>
+	<a routerLink="/home" routerLinkActive="active">Back</a>
 </div>
