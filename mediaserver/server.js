@@ -5,24 +5,24 @@ const app = express();
 const cors = require('cors');
 const busboy = require('connect-busboy');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const modPlaylists = require('./model/model').Playlists;
+// const mongoose = require('mongoose');
+// const modPlaylists = require('./model/model').Playlists;
 
-const db = mongoose.connection;
-const mongoUrl = 'mongodb://' + process.env.MONGO_USER + ':' + process.env.MONGO_PASS + '@192.168.1.19:27017/mediaserver';
-var connectWithRetry = function() {
-  return mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true }, function(err) {
-    if (err) {
-      console.error('Failed to connect to mongo on startup - retrying in 15 sec', err);
-      setTimeout(connectWithRetry, 15000);
-    }
-  });
-};
-connectWithRetry();
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
-  console.log("Connected to the DB");
-});
+// const db = mongoose.connection;
+// const mongoUrl = 'mongodb://' + process.env.MONGO_USER + ':' + process.env.MONGO_PASS + '@192.168.1.19:27017/mediaserver';
+// var connectWithRetry = function() {
+//   return mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true }, function(err) {
+//     if (err) {
+//       console.error('Failed to connect to mongo on startup - retrying in 15 sec', err);
+//       setTimeout(connectWithRetry, 15000);
+//     }
+//   });
+// };
+// connectWithRetry();
+// db.on('error', console.error.bind(console, 'connection error:'));
+// db.once('open', () => {
+//   console.log("Connected to the DB");
+// });
 
 const originsWhitelist = [
   'http://192.168.1.19:4200',
@@ -200,15 +200,20 @@ app.post('/fileupload', (req, res) => {
 app.post('/playlistcreate', async (req, res) => {
   let playlistBody = JSON.stringify(req.body).replace('{', '').replace('}', '');
   let playlistArray = playlistBody.split(',');
+  let playlistId = playlistArray.pop().replace('"playlistid":"', '').replace('"', '');
   let playlistName = playlistArray.pop().replace('"playlistname":"', '').replace('"', '');
   for (let i = 0; i < playlistArray.length; i++) {
     playlistArray[i] = playlistArray[i].replace('":"on"', '').replace('"', '');
   }
 
-  await modPlaylists.create({
-    playlistname: playlistName,
-    videos: playlistArray
-  });
+  if (playlistId) {
+    await modPlaylists.updateOne({ _id: playlistId }, { $set: { videos: playlistArray } });
+  } else {
+    await modPlaylists.create({
+      playlistname: playlistName,
+      videos: playlistArray
+    });
+  }
 
   let dbRecord = await modPlaylists.findOne({ playlistname: playlistName });
   let redirectPath = req.get('referer').replace('createplaylist', '');

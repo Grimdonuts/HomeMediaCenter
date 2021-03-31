@@ -1,18 +1,27 @@
+<br />
+<a routerLink="/home" routerLinkActive="active">Home</a>&nbsp;
+<a routerLink="/createplaylist" routerLinkActive="active">Create a Playlist</a>&nbsp;
+<div style="display: inline-block;">
+	<button class="accordionPlaylist" (click)="accordionclick($event)">Edit Playlist</button>&nbsp;
+	<div class="panelPlaylist" style="z-index: 1;">
+		<ng-container *ngFor="let playlist of playlists">
+			<br />
+			<a [routerLink]="['/createplaylist']" [queryParams]="{ playlistid: playlist._id }"
+				routerLinkActive="active">{{playlist.playlistname}}</a>
+			<br />
+		</ng-container>
+		<br />
+	</div>
+</div>
+<br />
+
 <table>
-	<tr>
-		<td>
-			<br />
-			<a routerLink="/home" routerLinkActive="active">Home</a> <a routerLink="/createplaylist" routerLinkActive="active" style="margin-left:10px;">Create a Playlist</a>
-			<br />
-			<br />
-		</td>
-	</tr>
 	<ng-container *ngFor="let playlist of playlists; let i = index">
 		<tr>
 			<td>
 				<div class="listContent">
 					<button class="accordion"
-						(click)="accordionclick($event)">&nbsp;{{playlist.playlistname}}&nbsp;</button>
+						(click)="accordionclick($event)">&nbsp;{{playlist.playlistname}}&nbsp;</button> &nbsp;
 					<div class="panel">
 						<ng-container *ngFor="let playlistvideo of playlist.videos">
 							<br />

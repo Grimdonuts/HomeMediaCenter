@@ -15,7 +15,6 @@ export class PlaylistsComponent implements OnInit {
     this.http.get('http://192.168.1.19:3000/playlists').subscribe((res: string[]) => {
       res.forEach((data) => {
           this.playlists.push(data);
-          console.log(data);
       });
     });
   }

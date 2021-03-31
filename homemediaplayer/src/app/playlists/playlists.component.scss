@@ -1,0 +1,17 @@
+.accordionPlaylist {
+	font-size: 22px;
+	text-decoration: none;
+	color: whitesmoke;
+	background-color: rgb(54, 54, 54);
+	box-shadow: gray inset 0px 0px 0px 2px;
+	border:0em;
+}
+
+.panelPlaylist {
+	position: absolute;
+	display: none;
+	width: max-content;
+	border: gray;
+	border-style: solid;
+	background-color: rgb(54, 54, 54);
+}
