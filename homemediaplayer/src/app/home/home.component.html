@@ -6,6 +6,12 @@
 			<br />
 			<br />
 		</td>
+		<td *ngIf="lastWatched">
+			<br />
+			<a (click)="navigateToLast()" style="cursor: pointer;">Visit last watched</a>
+			<br />
+			<br />
+		</td>
 	</tr>
 	<ng-container *ngFor="let fileName of videonames; let i = index">
 		<tr *ngIf="((i % 4) == 0)">

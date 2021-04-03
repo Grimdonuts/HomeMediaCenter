@@ -8,15 +8,21 @@ import { HttpClient } from '@angular/common/http';
 })
 export class HomeComponent implements OnInit {
   videonames = [];
-
+  lastWatched: string = "";
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.http.get('http://192.168.1.19:3000/filenames').subscribe((res: string[]) => {
       res.forEach((data) => {
-          this.videonames.push(data);
+        this.videonames.push(data);
       });
     });
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    var c = ca[0];
+    if (c.indexOf("lastWatchedURL=") == 0) {
+      this.lastWatched = c.substring("lastWatchedURL=".length, c.length);
+    }
   }
 
   accordionclick($event) {
@@ -30,5 +36,9 @@ export class HomeComponent implements OnInit {
     } else {
       panel.style.display = "block";
     }
+  }
+
+  navigateToLast() {
+    window.location.href = this.lastWatched;
   }
 }
