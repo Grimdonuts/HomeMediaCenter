@@ -26,7 +26,6 @@ export class HomeComponent implements OnInit {
   }
 
   accordionclick($event) {
-    $event.target.classList.toggle("active");
     let panel = $event.target.nextElementSibling;
     if (panel.className === "accordion") {
       panel = panel.nextElementSibling;
