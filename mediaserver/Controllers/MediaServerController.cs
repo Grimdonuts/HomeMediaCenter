@@ -73,7 +73,7 @@ namespace mediaserver.Controllers
 
         [HttpGet]
         [Route("image")]
-        public FileStreamResult GetImage(String video)
+        public FileStreamResult GetImage(string video)
         {
             FileStream fs = System.IO.File.OpenRead(Directory.GetCurrentDirectory() + "/assets/" + video);
             FileStreamResult videoProcessed = new FileStreamResult(fs, "image/jpeg");
