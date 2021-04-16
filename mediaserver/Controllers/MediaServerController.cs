@@ -150,7 +150,7 @@ namespace mediaserver.Controllers
                                 {
                                     previousFile = rootContents[i - 1].Name;
                                 }
-                                if (i != rootContents.Count())
+                                if ((i + 1) != rootContents.Count())
                                 {
                                     nextFile = rootContents[i + 1].Name;
                                 }
@@ -171,7 +171,7 @@ namespace mediaserver.Controllers
                 Console.WriteLine(ex.StackTrace);
                 Console.WriteLine(ex.InnerException);
                 Console.WriteLine(ex.Data);
-                return Json(new { status = "error", message = ex.Message });
+                return Json(null);
             }
         }
     }
