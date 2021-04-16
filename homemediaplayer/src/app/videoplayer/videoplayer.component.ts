@@ -45,20 +45,22 @@ export class VideoplayerComponent implements OnInit {
       this.videoCurrentTime = params.videoTime;
     });
     this.http.get('http://192.168.1.19:3000/foldercheck?filename=' + this.rawvideoname).subscribe((res: string[]) => {
-      res.forEach((data) => {
-        this.previousFile = data["previous"];
-        this.nextFile = data["next"];
-        let video = document.getElementById('singleVideo');
-        if (this.videoCurrentTime) {
-          video["currentTime"] = this.videoCurrentTime;
-        }
-        let routerr = this.router;
-        video.addEventListener('ended', function () {
-          if (data["next"].length > 0) {
-            routerr.navigate(['/videoplayer'], { queryParams: { 'video': data["next"] } });
+      if (res !== null) {
+        res.forEach((data) => {
+          this.previousFile = data["previous"];
+          this.nextFile = data["next"];
+          let video = document.getElementById('singleVideo');
+          if (this.videoCurrentTime) {
+            video["currentTime"] = this.videoCurrentTime;
           }
+          let routerr = this.router;
+          video.addEventListener('ended', function () {
+            if (data["next"].length > 0) {
+              routerr.navigate(['/videoplayer'], { queryParams: { 'video': data["next"] } });
+            }
+          });
         });
-      });
+      }
     });
   }
 

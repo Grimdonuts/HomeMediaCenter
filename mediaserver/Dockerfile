@@ -1,6 +1,14 @@
-FROM node:14.15.4-buster-slim
-WORKDIR /usr/src/app
-COPY . .
-RUN mkdir assets
+FROM mcr.microsoft.com/dotnet/core/sdk:2.1 AS build-env
+WORKDIR /app
+
+COPY *.csproj ./
+RUN dotnet restore
+
+COPY . ./
+RUN dotnet publish -c Release -o out
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.1
+WORKDIR /app
+COPY --from=build-env /app/out .
 EXPOSE 3000
-CMD [ "node", "server.js" ]
+ENTRYPOINT ["dotnet", "mediaserver.dll"]
