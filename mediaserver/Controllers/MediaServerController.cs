@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using mediaserver.Models;
 using mediaserver.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -179,6 +180,83 @@ namespace mediaserver.Controllers
                 Console.WriteLine(ex.InnerException);
                 Console.WriteLine(ex.Data);
                 return Json(null);
+            }
+        }
+
+        [HttpPost]
+        [Route("playlistcreate")]
+        public async System.Threading.Tasks.Task<RedirectResult> PlaylistCreate()
+        {
+            using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
+            {
+                string body = await reader.ReadToEndAsync();
+                body = body.Replace("+", " ").Replace("=on", "");
+                Stack<string> brokenOutPlayStack = new Stack<string>();
+                string[] brokenOutPlaylist = body.Split('&');
+                foreach (var item in brokenOutPlaylist) { brokenOutPlayStack.Push(item); }
+                string playlistId = brokenOutPlayStack.Pop().Replace("playlistid=", "");
+                string playlistName = brokenOutPlayStack.Pop().Replace("playlistname=", "");
+                if (playlistId != "")
+                {
+                    _playlistService.Update(playlistId, new PlaylistModel { playlistname = playlistName, videos = brokenOutPlayStack, __v = 0 });
+                }
+                else
+                {
+                    PlaylistModel newDoc = _playlistService.Create(new PlaylistModel { playlistname = playlistName, videos = brokenOutPlayStack, __v = 0 });
+                    playlistId = newDoc.Id;
+                }
+                string referrer = Request.Headers["Referer"].ToString() + "playlistorder?id=" + playlistId;
+                return Redirect(referrer);
+            }
+        }
+
+        [HttpGet]
+        [Route("playlist")]
+        public PlaylistModel GetPlaylist(string id)
+        {
+            PlaylistModel newDoc = _playlistService.Get(id);
+            Stack<string> reversedList = new Stack<string>();
+            foreach(var item in newDoc.videos)
+            {
+                reversedList.Push(item);
+            }
+            newDoc.videos = reversedList;
+            return newDoc;
+        }
+
+        [HttpGet]
+        [Route("playlists")]
+        public List<PlaylistModel> GetPlaylists()
+        {
+            List<PlaylistModel> newDocs = _playlistService.Get();
+            foreach(var document in newDocs)
+            {
+                Stack<string> reversedList = new Stack<string>();
+                foreach (var item in document.videos)
+                {
+                    reversedList.Push(item);
+                }
+                document.videos = reversedList;
+            }
+            return newDocs;
+        }
+
+        [HttpPost]
+        [Route("playlistorder")]
+        public async System.Threading.Tasks.Task<RedirectResult> PlaylistOrder()
+        {
+            using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
+            {
+                string body = await reader.ReadToEndAsync();
+                body = body.Replace("+", " ").Replace("video=", "");
+                Stack<string> brokenOutPlayStack = new Stack<string>();
+                string[] brokenOutPlaylist = body.Split('&');
+                foreach (var item in brokenOutPlaylist) { brokenOutPlayStack.Push(item); }
+                string playlistId = brokenOutPlayStack.Pop().Replace("playlistId=", "");
+                string playlistName = _playlistService.Get(playlistId).playlistname;
+                _playlistService.Update(playlistId, new PlaylistModel { Id = playlistId, playlistname = playlistName, videos = brokenOutPlayStack, __v = 0 });
+                string referrer = Request.Headers["Referer"].ToString() + "playlists";
+                return Redirect(referrer);
             }
         }
     }

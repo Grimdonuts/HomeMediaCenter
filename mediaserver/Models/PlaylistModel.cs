@@ -10,7 +10,7 @@ namespace mediaserver.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
         public string playlistname { get; set; }
-        public List<string> videos { get; set; }
+        public Stack<string> videos { get; set; }
         public int __v { get; set; }
     }
 }
