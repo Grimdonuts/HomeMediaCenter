@@ -11,7 +11,7 @@
     "mediaserver": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "MediaServer/filenames",
+      "launchUrl": "filenames",
       "applicationUrl": "http://localhost:3000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

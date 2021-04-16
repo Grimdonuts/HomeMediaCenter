@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using mediaserver.Models;
+using mediaserver.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 
@@ -12,6 +13,12 @@ namespace mediaserver.Controllers
     [ApiController]
     public class MediaServerController : Controller
     {
+        private readonly PlaylistService _playlistService;
+
+        public MediaServerController(PlaylistService playlistService)
+        {
+            _playlistService = playlistService;
+        }
 
         [HttpGet]
         [Route("filenames")]

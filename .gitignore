@@ -2,3 +2,4 @@ mediaserver/assets/*.mp4
 mediaserver/assets/*.jpg
 mediaserver/assets/**/*.mp4
 mediaserver/assets/**/*.jpg
+mediaserver/appsettings.json

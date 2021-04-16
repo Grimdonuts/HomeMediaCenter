@@ -12,8 +12,6 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - MONGO_USER=jnelson
-      - MONGO_PASS=pass
       - ASPNETCORE_URLS=http://0.0.0.0:3000
     volumes:
       - type: bind

@@ -4,3 +4,4 @@
 /assets/*.jpg
 bin/
 obj/
+appsettings.json
