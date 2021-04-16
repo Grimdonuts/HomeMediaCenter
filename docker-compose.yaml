@@ -14,13 +14,11 @@ services:
     environment:
       - MONGO_USER=jnelson
       - MONGO_PASS=pass
+      - ASPNETCORE_URLS=http://0.0.0.0:3000
     volumes:
       - type: bind
         source: /media/disk/HomeMediaCenter/mediaserver/assets
-        target: /usr/src/app/assets
-      - type: bind
-        source: /media/disk/HomeMediaCenter/mediaserver/node_modules
-        target: /usr/src/app/node_modules
+        target: /app/assets
 
   homemediaplayer:
     build:
