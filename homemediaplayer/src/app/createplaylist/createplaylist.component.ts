@@ -20,24 +20,24 @@ export class CreateplaylistComponent implements OnInit {
     this.http.get('http://192.168.1.19:3000/filenames').subscribe((res: string[]) => {
       res.forEach((data) => {
         this.videonames.push(data);
-      });
-    });
-    this.playlistSubscription = this.route.queryParams.subscribe(params => {
-      this.playlistid = params.playlistid;
-    });
-    if (this.playlistid !== undefined) {
-      this.http.get('http://192.168.1.19:3000/playlist?id=' + this.playlistid).subscribe((res: string[]) => {
-        this.playlistName = res["playlistname"];
-        this.playlistVideos = res["videos"];
-        document.getElementById("playlistname")["value"] = this.playlistName;
-        document.getElementById("playlistid")["value"] = this.playlistid;
-        document.getElementById("createButton")["value"] = "Modify";
-        res["videos"].forEach((videoName) => {
-          document.getElementById(videoName)["checked"] = true;
-          document.getElementsByClassName(document.getElementById(videoName).className)[0]["checked"] = true;
+        this.playlistSubscription = this.route.queryParams.subscribe(params => {
+          this.playlistid = params.playlistid;
         });
+        if (this.playlistid !== undefined) {
+          this.http.get('http://192.168.1.19:3000/playlist?id=' + this.playlistid).subscribe((res: string[]) => {
+            this.playlistName = res["playlistname"];
+            this.playlistVideos = res["videos"];
+            document.getElementById("playlistname")["value"] = this.playlistName;
+            document.getElementById("playlistid")["value"] = this.playlistid;
+            document.getElementById("createButton")["value"] = "Modify";
+            res["videos"].forEach((videoName) => {
+              document.getElementById(videoName)["checked"] = true;
+              document.getElementsByClassName(document.getElementById(videoName).className)[0]["checked"] = true;
+            });
+          });
+        }
       });
-    }
+    });
   }
 
   checkDescendants($event) {
