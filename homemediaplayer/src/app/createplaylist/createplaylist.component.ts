@@ -25,7 +25,7 @@ export class CreateplaylistComponent implements OnInit {
     this.playlistSubscription = this.route.queryParams.subscribe(params => {
       this.playlistid = params.playlistid;
     });
-    if (this.playlistid !== "") {
+    if (this.playlistid !== undefined) {
       this.http.get('http://192.168.1.19:3000/playlist?id=' + this.playlistid).subscribe((res: string[]) => {
         this.playlistName = res["playlistname"];
         this.playlistVideos = res["videos"];
