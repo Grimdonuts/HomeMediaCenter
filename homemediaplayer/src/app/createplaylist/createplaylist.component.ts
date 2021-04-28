@@ -18,11 +18,11 @@ export class CreateplaylistComponent implements OnInit {
 
   ngOnInit() {
     this.http.get('http://192.168.1.19:3000/filenames').subscribe((res: string[]) => {
+      this.playlistSubscription = this.route.queryParams.subscribe(params => {
+        this.playlistid = params.playlistid;
+      });
       res.forEach((data) => {
         this.videonames.push(data);
-        this.playlistSubscription = this.route.queryParams.subscribe(params => {
-          this.playlistid = params.playlistid;
-        });
         if (this.playlistid !== undefined) {
           this.http.get('http://192.168.1.19:3000/playlist?id=' + this.playlistid).subscribe((res: string[]) => {
             this.playlistName = res["playlistname"];
