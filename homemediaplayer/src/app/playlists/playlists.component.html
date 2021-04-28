@@ -6,7 +6,7 @@
 	<div class="panelPlaylist" style="z-index: 1;">
 		<ng-container *ngFor="let playlist of playlists">
 			<br />
-			<a [routerLink]="['/createplaylist']" [queryParams]="{ playlistid: playlist.id }"
+			<a [routerLink]="['/createplaylist']" [queryParams]="{ playlistid: playlist._id }"
 				routerLinkActive="active">{{playlist.playlistname}}</a>
 			<br />
 		</ng-container>
@@ -26,7 +26,7 @@
 						<ng-container *ngFor="let playlistvideo of playlist.videos">
 							<br />
 							<a [routerLink]="['/playlistvideo']"
-								[queryParams]="{ video: playlistvideo, playlistid: playlist.id }"
+								[queryParams]="{ video: playlistvideo, playlistid: playlist._id }"
 								routerLinkActive="active">{{playlistvideo}}</a>
 							<br />
 						</ng-container>

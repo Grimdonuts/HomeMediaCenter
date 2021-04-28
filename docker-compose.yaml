@@ -12,11 +12,15 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - ASPNETCORE_URLS=http://0.0.0.0:3000
+      - MONGO_USER=jnelson
+      - MONGO_PASS=pass
     volumes:
       - type: bind
-        source: /media/disk/HomeMediaCenter/mediaserver/assets
-        target: /app/assets
+        source: /media/disk/assets
+        target: /usr/src/app/assets
+      - type: bind
+        source: /home/pi/HomeMediaCenter/mediaserver/node_modules
+        target: /usr/src/app/node_modules
 
   homemediaplayer:
     build:
@@ -29,7 +33,7 @@ services:
       - "4200:4200"
     volumes:
       - type: bind
-        source: /media/disk/HomeMediaCenter/homemediaplayer/node_modules
+        source: /home/pi/HomeMediaCenter/homemediaplayer/node_modules
         target: /usr/src/app/node_modules
 
   mongo:
@@ -43,5 +47,5 @@ services:
       - "27017:27017"
     volumes:
       - type: bind
-        source: /media/disk/mongo-data/
+        source: /home/pi/mongo-data/
         target: /mongo-data/

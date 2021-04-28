@@ -11,4 +11,9 @@ else
 fi
 trap 'kill -2 1; wait 1' SIGTERM
 
+mongod --fork --dbpath /mongo-data/ --syslog
+mongo --eval "db.dropAllUsers()" mediaserver
+mongo --eval "db.createUser({user: 'jnelson', pwd: 'pass', roles:[{role:'readWrite', db:'mediaserver'}]})" mediaserver
+mongod --shutdown --dbpath /mongo-data/
+
 exec "$@"

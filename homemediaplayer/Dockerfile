@@ -2,9 +2,6 @@
 FROM node:14.15.4-buster-slim as build
 WORKDIR /usr/src/app
 COPY . .
-RUN npm install
-RUN npm install -g @angular/cli
-RUN npm run build --prod
 
 FROM nginx
 
