@@ -198,7 +198,7 @@ namespace mediaserver.Controllers
                 string playlistName = brokenOutPlayStack.Pop().Replace("playlistname=", "");
                 if (playlistId != "")
                 {
-                    _playlistService.Update(playlistId, new PlaylistModel { playlistname = playlistName, videos = brokenOutPlayStack, __v = 0 });
+                    _playlistService.Update(new PlaylistModel { Id = playlistId, playlistname = playlistName, videos = brokenOutPlayStack, __v = 0 });
                 }
                 else
                 {
@@ -254,7 +254,7 @@ namespace mediaserver.Controllers
                 foreach (var item in brokenOutPlaylist) { brokenOutPlayStack.Push(item); }
                 string playlistId = brokenOutPlayStack.Pop().Replace("playlistId=", "");
                 string playlistName = _playlistService.Get(playlistId).playlistname;
-                _playlistService.Update(playlistId, new PlaylistModel { Id = playlistId, playlistname = playlistName, videos = brokenOutPlayStack, __v = 0 });
+                _playlistService.Update(new PlaylistModel { Id = playlistId, playlistname = playlistName, videos = brokenOutPlayStack, __v = 0 });
                 string referrer = Request.Headers["Referer"].ToString() + "playlists";
                 return Redirect(referrer);
             }

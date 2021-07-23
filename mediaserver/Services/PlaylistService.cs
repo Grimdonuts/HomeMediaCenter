@@ -37,8 +37,8 @@ namespace mediaserver.Services
             return playlist;
         }
 
-        public void Update(string id, PlaylistModel playlistIn) =>
-            _playlists.ReplaceOne(playlist => playlist.Id == id, playlistIn);
+        public void Update(PlaylistModel playlistIn) =>
+            _playlists.ReplaceOne(playlist => playlist.Id == playlistIn.Id, playlistIn);
 
         public void Remove(PlaylistModel playlistIn) =>
             _playlists.DeleteOne(playlist => playlist.Id == playlistIn.Id);
