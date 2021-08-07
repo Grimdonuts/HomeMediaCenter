@@ -19,7 +19,7 @@
 				<td *ngIf="j >= i && j < i+4">
 					<div class="listContent" *ngIf="fileName.folder">
 						<img (click)="accordionclick($event)"
-							src="http://192.168.1.19:3000/image?video={{fileName.image}}" />
+							src="http://192.168.1.19:3000/image?video={{fileName.image}}" loading="lazy" />
 						<button class="accordion" (click)="accordionclick($event)">-{{fileName.folder}}-</button>
 						<div class="panel">
 							<ng-container *ngFor="let videochildren of fileName.children">
@@ -33,7 +33,7 @@
 					</div>
 					<div class="listContent" *ngIf="fileName.video && fileName.folder === null">
 						<img [routerLink]="['/videoplayer']" [queryParams]="{ video: fileName.video }"
-							routerLinkActive="active" src="http://192.168.1.19:3000/image?video={{fileName.image}}" />
+							routerLinkActive="active" src="http://192.168.1.19:3000/image?video={{fileName.image}}" loading="lazy" />
 						<button class="accordion" [routerLink]="['/videoplayer']"
 							[queryParams]="{ video: fileName.video }"
 							routerLinkActive="active">&nbsp;{{fileName.video}}&nbsp;</button>

@@ -13,6 +13,7 @@ import { PlaylistorderComponent } from './playlistorder/playlistorder.component'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { PlaylistvideoComponent } from './playlistvideo/playlistvideo.component';
+import { LazyImgDirective } from './lazy.directive';
  
 const appRoutes: Routes = [
     { path: 'videoplayer', component: VideoplayerComponent },
@@ -37,7 +38,8 @@ const appRoutes: Routes = [
        PlaylistsComponent,
        CreateplaylistComponent,
        PlaylistorderComponent,
-       PlaylistvideoComponent
+       PlaylistvideoComponent,
+       LazyImgDirective
    ],
    imports: [
        RouterModule.forRoot(appRoutes, { relativeLinkResolution: 'legacy' }),
