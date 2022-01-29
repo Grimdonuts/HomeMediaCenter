@@ -61,6 +61,9 @@ export class PlaylistvideoComponent implements OnInit {
       if (this.videoCurrentTime) {
         video["currentTime"] = this.videoCurrentTime;
       }
+      if (video.requestFullscreen) {
+        video.requestFullscreen();
+      }
       let routerr = this.router;
       video.addEventListener('ended', function () {
         if (next.length > 0) {

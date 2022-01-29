@@ -81,39 +81,33 @@ namespace mediaserver.Controllers
 
         [HttpGet]
         [Route("image")]
-        public FileStreamResult GetImage(string video)
+        public FileResult GetImage(string video)
         {
-            FileStream fs = System.IO.File.OpenRead(Directory.GetCurrentDirectory() + "/assets/" + video);
-            FileStreamResult videoProcessed = new FileStreamResult(fs, "image/jpeg");
-            videoProcessed.EnableRangeProcessing = true;
-            fs.Close();
-            return videoProcessed;
+            return PhysicalFile(Directory.GetCurrentDirectory() + "/assets/" + video, "image/jpeg");
+            // FileStream fs = System.IO.File.OpenRead(Directory.GetCurrentDirectory() + "/assets/" + video);
+            // FileStreamResult videoProcessed = new FileStreamResult(fs, "image/jpeg");
+            // videoProcessed.EnableRangeProcessing = true;
+            // fs.Close();
+            // return videoProcessed;
         }
 
         [HttpGet]
         [Route("video")]
-        public FileStreamResult GetVideo(string video)
+        public FileResult GetVideo(string video)
         {
             try
             {
                 if (System.IO.File.Exists(Directory.GetCurrentDirectory() + "/assets/" + video) && !Directory.Exists(Directory.GetCurrentDirectory() + "/assets/" + video))
                 {
-                    FileStream fs = System.IO.File.OpenRead(Directory.GetCurrentDirectory() + "/assets/" + video);
-                    FileStreamResult videoProcessed = new FileStreamResult(fs, "video/mp4");
-                    videoProcessed.EnableRangeProcessing = true;
-                    fs.Close();
-                    return videoProcessed;
+                    return PhysicalFile(Directory.GetCurrentDirectory() + "/assets/" + video, "application/octet-stream", enableRangeProcessing: true);
+                    //return videoProcessed;
                 }
                 else
                 {
                     string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + "/assets", video, SearchOption.AllDirectories);
                     if (files.Count() > 0)
                     {
-                        FileStream fs = System.IO.File.OpenRead(files[0]);
-                        FileStreamResult videoProcessed = new FileStreamResult(fs, "video/mp4");
-                        videoProcessed.EnableRangeProcessing = true;
-                        fs.Close();
-                        return videoProcessed;
+                        return PhysicalFile(Directory.GetCurrentDirectory() + "/assets/" + video, "application/octet-stream", enableRangeProcessing: true);
                     }
                     else
                     {
