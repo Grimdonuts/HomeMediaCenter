@@ -86,6 +86,7 @@ namespace mediaserver.Controllers
             FileStream fs = System.IO.File.OpenRead(Directory.GetCurrentDirectory() + "/assets/" + video);
             FileStreamResult videoProcessed = new FileStreamResult(fs, "image/jpeg");
             videoProcessed.EnableRangeProcessing = true;
+            fs.Close();
             return videoProcessed;
         }
 
@@ -100,6 +101,7 @@ namespace mediaserver.Controllers
                     FileStream fs = System.IO.File.OpenRead(Directory.GetCurrentDirectory() + "/assets/" + video);
                     FileStreamResult videoProcessed = new FileStreamResult(fs, "video/mp4");
                     videoProcessed.EnableRangeProcessing = true;
+                    fs.Close();
                     return videoProcessed;
                 }
                 else
@@ -110,6 +112,7 @@ namespace mediaserver.Controllers
                         FileStream fs = System.IO.File.OpenRead(files[0]);
                         FileStreamResult videoProcessed = new FileStreamResult(fs, "video/mp4");
                         videoProcessed.EnableRangeProcessing = true;
+                        fs.Close();
                         return videoProcessed;
                     }
                     else
