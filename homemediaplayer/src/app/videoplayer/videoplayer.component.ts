@@ -62,6 +62,9 @@ export class VideoplayerComponent implements OnInit {
         });
       } else {
         let video = document.getElementById('singleVideo');
+        if (this.videoCurrentTime) {
+          video["currentTime"] = this.videoCurrentTime;
+        }
         if (video.requestFullscreen) {
           video.requestFullscreen();
         }
