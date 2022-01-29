@@ -53,9 +53,6 @@ export class VideoplayerComponent implements OnInit {
           if (this.videoCurrentTime) {
             video["currentTime"] = this.videoCurrentTime;
           }
-          if (video.requestFullscreen) {
-            video.requestFullscreen();
-          }
           let routerr = this.router;
           video.addEventListener('ended', function () {
             if (data["next"].length > 0) {
@@ -63,6 +60,11 @@ export class VideoplayerComponent implements OnInit {
             }
           });
         });
+      } else {
+        let video = document.getElementById('singleVideo');
+        if (video.requestFullscreen) {
+          video.requestFullscreen();
+        }
       }
     });
   }

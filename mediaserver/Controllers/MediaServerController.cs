@@ -84,11 +84,6 @@ namespace mediaserver.Controllers
         public FileResult GetImage(string video)
         {
             return PhysicalFile(Directory.GetCurrentDirectory() + "/assets/" + video, "image/jpeg");
-            // FileStream fs = System.IO.File.OpenRead(Directory.GetCurrentDirectory() + "/assets/" + video);
-            // FileStreamResult videoProcessed = new FileStreamResult(fs, "image/jpeg");
-            // videoProcessed.EnableRangeProcessing = true;
-            // fs.Close();
-            // return videoProcessed;
         }
 
         [HttpGet]
@@ -100,14 +95,13 @@ namespace mediaserver.Controllers
                 if (System.IO.File.Exists(Directory.GetCurrentDirectory() + "/assets/" + video) && !Directory.Exists(Directory.GetCurrentDirectory() + "/assets/" + video))
                 {
                     return PhysicalFile(Directory.GetCurrentDirectory() + "/assets/" + video, "application/octet-stream", enableRangeProcessing: true);
-                    //return videoProcessed;
                 }
                 else
                 {
                     string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + "/assets", video, SearchOption.AllDirectories);
                     if (files.Count() > 0)
                     {
-                        return PhysicalFile(Directory.GetCurrentDirectory() + "/assets/" + video, "application/octet-stream", enableRangeProcessing: true);
+                        return PhysicalFile(files[0], "application/octet-stream", enableRangeProcessing: true);
                     }
                     else
                     {
