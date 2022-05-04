@@ -94,14 +94,14 @@ namespace mediaserver.Controllers
             {
                 if (System.IO.File.Exists(Directory.GetCurrentDirectory() + "/assets/" + video) && !Directory.Exists(Directory.GetCurrentDirectory() + "/assets/" + video))
                 {
-                    return PhysicalFile(Directory.GetCurrentDirectory() + "/assets/" + video, "application/octet-stream", enableRangeProcessing: true);
+                    return PhysicalFile(Directory.GetCurrentDirectory() + "/assets/" + video, "video/mp4", enableRangeProcessing: true);
                 }
                 else
                 {
                     string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + "/assets", video, SearchOption.AllDirectories);
                     if (files.Count() > 0)
                     {
-                        return PhysicalFile(files[0], "application/octet-stream", enableRangeProcessing: true);
+                        return PhysicalFile(files[0], "video/mp4", enableRangeProcessing: true);
                     }
                     else
                     {
